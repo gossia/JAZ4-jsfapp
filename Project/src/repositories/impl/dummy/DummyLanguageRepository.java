@@ -1,4 +1,4 @@
-package repositories.impl;
+package repositories.impl.dummy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,9 +100,4 @@ private DummyDb db;
 		return null;
 	}
 	
-	
-	
-	
-	
-
 }

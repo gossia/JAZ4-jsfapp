@@ -1,4 +1,4 @@
-package repositories.impl;
+package repositories.impl.dummy;
 
 import java.util.*;
 import domain.*;

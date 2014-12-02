@@ -29,6 +29,7 @@ public class Main {
 			stmt.execute("DROP TABLE IF EXISTS addresses");
 			stmt.execute("DROP TABLE IF EXISTS languages");
 			
+			
 			String createTeacherTable=
 					"CREATE TABLE teachers ("
 					+ "id INT AUTO_INCREMENT PRIMARY KEY,"
@@ -67,11 +68,10 @@ public class Main {
 			stmt.executeUpdate(createAddressTable);
 			stmt.executeUpdate(createLanguageTable);
 			
-			ITeacherRepository teachers = new TeacherRepository(connection);
-			IStudentRepository students = new StudentRepository(connection);
-			IAddressRepository addresses = new AddressRepository(connection);
-			ILanguageRepository languages = new LanguageRepository(connection);
-			
+			IRepository<Teacher> teachers = new TeacherRepository(connection, new TeacherBuilder());
+			IRepository<Student> students = new StudentRepository(connection, new StudentBuilder());
+			IRepository<Address> addresses = new AddressRepository(connection, new AddressBuilder());
+			IRepository<Language> languages = new LanguageRepository(connection, new LanguageBuilder());
 			
 			
 			Student sluchacz1 = new Student();
@@ -95,7 +95,7 @@ public class Main {
 			adres1.setHouseNumber("55");
 			adres1.setLocalNumber("1");
 			
-
+			
 			//teachers
 			teachers.add(lektor1);
 			List<Teacher> teachersfromDb = teachers.getAll();
@@ -140,10 +140,12 @@ public class Main {
 			//Student toDel = students.getAll().get(0);
 			//students.delete(toDel);
 			
+			
 			System.out.println("Wszyscy studenci w bazie:");
 			for(Student fromDb : students.getAll())
 				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
 				+fromDb.getPesel());
+			
 			
 			//addresses
 			addresses.add(adres1);
@@ -173,6 +175,11 @@ public class Main {
 			System.out.println("Wszystkie jêzyki w bazie:");
 			for(Language fromDb : languages.getAll())
 				System.out.println(fromDb.getId()+" "+fromDb.getName()+" "+fromDb.getLevel());
+			
+			
+			
+			
+			
 			
 			
 			
@@ -228,7 +235,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-
+		
 	}
 }
 

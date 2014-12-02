@@ -1,4 +1,4 @@
-package repositories.impl;
+package repositories.impl.dummy;
 
 import repositories.*;
 
@@ -26,6 +26,4 @@ public class DummyRepositoryCatalog implements IRepositoryCatalog {
 		return new DummyAddressRepository(db);
 	}
 	
-	
-
 }
