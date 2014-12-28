@@ -2,7 +2,6 @@ package repositories.impl;
 
 import java.sql.*;
 
-import domain.Student;
 import domain.Teacher;
 
 public class TeacherBuilder implements IEntityBuilder<Teacher> {

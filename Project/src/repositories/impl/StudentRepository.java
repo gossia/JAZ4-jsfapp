@@ -1,17 +1,21 @@
 package repositories.impl;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import domain.*;
-import repositories.IStudentRepository;
-
+import unitofwork.IUnitOfWork;
 
 public class StudentRepository extends Repository<Student> {
 	
-	public StudentRepository(Connection connection, IEntityBuilder<Student> builder) {
-		super(connection,builder);
+	public StudentRepository(Connection connection, IEntityBuilder<Student> builder, IUnitOfWork uow) {
+		super(connection,builder,uow);
+	}
+	
+	@Override
+	protected void setUpInsertQuery(Student entity) throws SQLException {
+		insert.setString(1, entity.getFirstName());
+		insert.setString(2, entity.getLastName());
+		insert.setString(3, entity.getPesel());
 	}
 	
 	@Override
@@ -30,16 +34,7 @@ public class StudentRepository extends Repository<Student> {
 	}
 	
 	@Override
-	protected void setUpInsertQuery(Student entity) throws SQLException {
-		
-		insert.setString(1, entity.getFirstName());
-		insert.setString(2, entity.getLastName());
-		insert.setString(3, entity.getPesel());
-	}
-	
-	@Override
 	protected void setUpUpdateQuery(Student entity) throws SQLException {
-		
 		update.setString(1, entity.getFirstName());
 		update.setString(2, entity.getLastName());
 		update.setString(3, entity.getPesel());

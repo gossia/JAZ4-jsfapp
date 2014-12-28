@@ -1,18 +1,26 @@
 package repositories.impl;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import domain.*;
-import repositories.IAddressRepository;
+import unitofwork.IUnitOfWork;
 
 public class AddressRepository extends Repository<Address> {
 	
-	public AddressRepository(Connection connection, IEntityBuilder<Address> builder) {
-		super(connection,builder);
+	public AddressRepository(Connection connection, IEntityBuilder<Address> builder, IUnitOfWork uow) {
+		super(connection,builder,uow);
 	}
 
+	@Override
+	protected void setUpInsertQuery(Address entity) throws SQLException {
+		insert.setString(1, entity.getCountry());
+		insert.setString(2, entity.getCity());
+		insert.setString(3, entity.getPostalCode());
+		insert.setString(4, entity.getStreet());
+		insert.setString(5, entity.getHouseNumber());
+		insert.setString(6, entity.getLocalNumber());
+	}
+	
 	@Override
 	protected String getInsertQuery() {
 		return "INSERT INTO addresses(country,city,postalCode,street,houseNumber,localNumber)"
@@ -28,17 +36,6 @@ public class AddressRepository extends Repository<Address> {
 	@Override
 	protected String getTableName() {
 		return "addresses";
-	}
-
-	@Override
-	protected void setUpInsertQuery(Address entity) throws SQLException {
-		
-		insert.setString(1, entity.getCountry());
-		insert.setString(2, entity.getCity());
-		insert.setString(3, entity.getPostalCode());
-		insert.setString(4, entity.getStreet());
-		insert.setString(5, entity.getHouseNumber());
-		insert.setString(6, entity.getLocalNumber());
 	}
 
 	@Override

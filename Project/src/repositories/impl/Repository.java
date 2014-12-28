@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import repositories.IRepository;
+import unitofwork.IUnitOfWork;
+import unitofwork.IUnitOfWorkRepository;
 import domain.*;
 
-public abstract class Repository<TEntity extends Entity> implements IRepository<TEntity> {
+public abstract class Repository<TEntity extends Entity> implements IRepository<TEntity>, IUnitOfWorkRepository{
 	
+	protected IUnitOfWork uow;
 	protected PreparedStatement insert;
 	protected PreparedStatement selectById;
 	protected PreparedStatement update;
@@ -24,8 +27,9 @@ public abstract class Repository<TEntity extends Entity> implements IRepository<
 	private String selectAllSql=
 			"SELECT * FROM "+ getTableName();
 	
-	protected Repository(Connection connection, IEntityBuilder<TEntity> builder) {
+	protected Repository(Connection connection, IEntityBuilder<TEntity> builder, IUnitOfWork uow) {
 		
+		this.uow=uow;
 		this.builder=builder;
 		this.connection = connection;
 		try
@@ -42,27 +46,48 @@ public abstract class Repository<TEntity extends Entity> implements IRepository<
 	}
 
 	@Override
-	public void add(TEntity entity) {
-		
-		try {
-			setUpInsertQuery(entity);
-			insert.executeUpdate();
-		} catch (SQLException e) {	
-			e.printStackTrace();
-		}
+	public void add(TEntity entity)
+	{
+		uow.markAsNew(entity, this);
 	}
 
 	@Override
-	public void update(TEntity entity) {
+	public void update(TEntity entity)
+	{
+		uow.markAsDirty(entity, this);
+	}
+	
+	@Override
+	public void delete(TEntity entity)
+	{	
+		uow.markAsDelete(entity, this);
+	}
+
+	@Override
+	public void persistAdd(Entity entity) {
 		
 		try {
-			setUpUpdateQuery(entity);
-			update.executeUpdate();
-		} catch (SQLException e) {		
+			setUpInsertQuery((TEntity)entity);
+			insert.executeUpdate();
+		} catch (SQLException e) {
+
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void persistUpdate(Entity entity) {
 
+		try {
+			setUpUpdateQuery((TEntity)entity);
+			update.executeUpdate();
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		
+	}
+	
 	@Override
 	public TEntity get(int id) {
 
@@ -98,8 +123,7 @@ public abstract class Repository<TEntity extends Entity> implements IRepository<
 	}
 	
 	@Override
-	public void delete(TEntity entity) {
-		
+	public void persistDelete(Entity entity) {
 		try {
 			delete.setInt(1, entity.getId());
 			delete.executeUpdate();
@@ -108,11 +132,12 @@ public abstract class Repository<TEntity extends Entity> implements IRepository<
 		}
 	}
 	
+	protected abstract void setUpInsertQuery(TEntity entity) throws SQLException;
 	protected abstract String getInsertQuery();
 	protected abstract String getUpdateQuery();
 	protected abstract String getTableName();
 	protected abstract void setUpUpdateQuery(TEntity entity) throws SQLException;
-	protected abstract void setUpInsertQuery(TEntity entity) throws SQLException;
+	
 	
 }
 

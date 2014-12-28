@@ -1,9 +1,10 @@
+import java.sql.*;
+
 import domain.*;
 import repositories.*;
 import repositories.impl.*;
-
-import java.sql.*;
-import java.util.List;
+import unitofwork.IUnitOfWork;
+import unitofwork.UnitOfWork;
 
 public class Main {
 
@@ -19,6 +20,9 @@ public class Main {
 		{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection connection = DriverManager.getConnection(url, user, password);
+			
+			IUnitOfWork uow = new UnitOfWork(connection);
+			
 			
 			Statement stmt = connection.createStatement();
 			
@@ -68,16 +72,21 @@ public class Main {
 			stmt.executeUpdate(createAddressTable);
 			stmt.executeUpdate(createLanguageTable);
 			
-			IRepository<Teacher> teachers = new TeacherRepository(connection, new TeacherBuilder());
-			IRepository<Student> students = new StudentRepository(connection, new StudentBuilder());
-			IRepository<Address> addresses = new AddressRepository(connection, new AddressBuilder());
-			IRepository<Language> languages = new LanguageRepository(connection, new LanguageBuilder());
+			
+			IRepository<Teacher> teachers = new TeacherRepository(connection, new TeacherBuilder(), uow);
+			IRepository<Student> students = new StudentRepository(connection, new StudentBuilder(), uow);
+			IRepository<Address> addresses = new AddressRepository(connection, new AddressBuilder(), uow);
+			IRepository<Language> languages = new LanguageRepository(connection, new LanguageBuilder(), uow);
 			
 			
 			Student sluchacz1 = new Student();
 			sluchacz1.setFirstName("Anna");
 			sluchacz1.setLastName("Kowalska");
 			sluchacz1.setPesel("82020212345");
+			Student sluchacz2 = new Student();
+			sluchacz2.setFirstName("Iwona");
+			sluchacz2.setLastName("Iwonowska");
+			sluchacz2.setPesel("72020212345");
 			
 			Teacher lektor1 = new Teacher();
 			lektor1.setFirstName("Ewa");
@@ -96,136 +105,62 @@ public class Main {
 			adres1.setLocalNumber("1");
 			
 			
-			//teachers
+			//add
+			
+			students.add(sluchacz1);
+			students.add(sluchacz2);
 			teachers.add(lektor1);
-			List<Teacher> teachersfromDb = teachers.getAll();
-			for(Teacher fromDb : teachersfromDb)
-				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName());
-			Teacher lektor2 = teachers.get(1);
-			lektor2.setLastName("Nowak");
-			teachers.update(lektor2);
-			Teacher toDelete = teachersfromDb.get(0);
-			teachers.delete(toDelete);
+			languages.add(angielskiB1);
+			addresses.add(adres1);
+			
+			uow.commit();
+			
+			System.out.println("Wszyscy studenci w bazie:");
+			for(Student fromDb : students.getAll())
+				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
+				+fromDb.getPesel());
+			
+			System.out.println("Wszyscy nauczyciele w bazie:");
 			for(Teacher fromDb : teachers.getAll())
 				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName());
 			
-			//students
-			students.add(sluchacz1);
-			sluchacz1 = students.get(1);
-			System.out.println("Wszyscy studenci w bazie:");
-			for(Student fromDb : students.getAll())
-				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
-				+fromDb.getPesel());
-			
-			Student sluchacz2 = new Student();
-			students.add(sluchacz2);
-			sluchacz2 = students.get(2);
-			System.out.println("Wszyscy studenci w bazie:");
-			for(Student fromDb : students.getAll())
-				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
-				+fromDb.getPesel());
-			
-			sluchacz2.setFirstName("Iwona");
-			sluchacz2.setLastName("Iwonowska");
-			sluchacz2.setPesel("85050512345");
-			students.update(sluchacz2);
-			System.out.println("Wszyscy studenci w bazie:");
-			for(Student fromDb : students.getAll())
-				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
-				+fromDb.getPesel());
-			
-			System.out.println("Student o id 1 to: "+students.get(1).getFirstName()+" "+students.get(1).getLastName());
-			
-			students.delete(sluchacz2);
-			//Student toDel = students.getAll().get(0);
-			//students.delete(toDel);
-			
-			
-			System.out.println("Wszyscy studenci w bazie:");
-			for(Student fromDb : students.getAll())
-				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
-				+fromDb.getPesel());
-			
-			
-			//addresses
-			addresses.add(adres1);
-			adres1 = addresses.get(1);
-			System.out.println("Wszystkie adresy w bazie:");
-			for(Address fromDb : addresses.getAll())
-				System.out.println(fromDb.getId()+" "+fromDb.getCountry()+", "+fromDb.getCity()+", "
-				+fromDb.getPostalCode()+", "+fromDb.getStreet()+", "+fromDb.getHouseNumber()+"/"
-				+fromDb.getLocalNumber());
-			
-			adres1.setLocalNumber("22");
-			addresses.update(adres1);
-			System.out.println("Wszystkie adresy w bazie:");
-			for(Address fromDb : addresses.getAll())
-				System.out.println(fromDb.getId()+" "+fromDb.getCountry()+", "+fromDb.getCity()+", "
-				+fromDb.getPostalCode()+", "+fromDb.getStreet()+", "+fromDb.getHouseNumber()+"/"
-				+fromDb.getLocalNumber());
-			
-			//languages
-			languages.add(angielskiB1);
-			angielskiB1 = languages.get(1);
-			Language angielskiB2 = new Language();
-			angielskiB2.setName("English");
-			angielskiB2.setLevel("Upper-Intermediate");
-			languages.add(angielskiB2);
-			angielskiB2 = languages.get(2);
 			System.out.println("Wszystkie jêzyki w bazie:");
 			for(Language fromDb : languages.getAll())
 				System.out.println(fromDb.getId()+" "+fromDb.getName()+" "+fromDb.getLevel());
 			
+			System.out.println("Wszystkie adresy w bazie:");
+			for(Address fromDb : addresses.getAll())
+				System.out.println(fromDb.getId()+" "+fromDb.getCountry()+", "+fromDb.getCity()+", "
+				+fromDb.getPostalCode()+", "+fromDb.getStreet()+", "+fromDb.getHouseNumber()+"/"
+				+fromDb.getLocalNumber());
+			
+			//update
+			
+			sluchacz2 = students.get(2);
+			sluchacz2.setLastName("Piwonowska");
+			students.update(sluchacz2);
+			
+			uow.commit();
+			
+			System.out.println("Wszyscy studenci w bazie:");
+			for(Student fromDb : students.getAll())
+				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
+				+fromDb.getPesel());
+			
+			//delete
+			
+			Student toDel = students.getAll().get(0);
+			students.delete(toDel);
+			
+			uow.commit();
+			
+			System.out.println("Wszyscy studenci w bazie:");
+			for(Student fromDb : students.getAll())
+				System.out.println(fromDb.getId()+" "+fromDb.getFirstName()+" "+fromDb.getLastName()+" "
+				+fromDb.getPesel());
 			
 			
-			
-			
-			
-			
-			
-			/*
-			// table teacher
-			stmt.execute("DROP TABLE IF EXISTS teacher");
-			stmt.execute("CREATE TABLE teacher (" +
-					"id INT AUTO_INCREMENT PRIMARY KEY," +
-					"firstname VARCHAR(20)," +
-					"lastname VARCHAR(40)" +
-					")");
-			stmt.execute("INSERT INTO teacher (firstname, lastname) VALUES" +
-			"('Janina', 'Nowak'), " +
-			"('Anna', 'Kowalska'), " +
-			"('Jan', 'Kowalski'), " +
-			"('Ewa', 'Kowalska')" +
-			"");
-			
-			ResultSet result1 = stmt.executeQuery("SELECT * FROM Teacher WHERE " +
-			"lastname = 'Kowalska' or lastname = 'Kowalski'");
-			System.out.println("");
-			System.out.println("List of teachers by lastname:");
-			while (result1.next())
-			{
-				System.out.println(result1.getString("firstname") + " " + result1.getString("lastname"));
-			}
-			
-			//table language
-			stmt.execute("DROP TABLE IF EXISTS language");
-			stmt.execute("CREATE TABLE language (" +
-					"id INT AUTO_INCREMENT PRIMARY KEY," +
-					"name VARCHAR(40)" +
-					")");
-			stmt.execute("INSERT INTO language (name) VALUES" +
-			"('English'), " +
-			"('German')" +
-			"");
-			
-			ResultSet result2 = stmt.executeQuery("SELECT * FROM language");
-			System.out.println("");
-			System.out.println("List of languages:");
-			while (result2.next())
-			{
-				System.out.println(result2.getString("name"));
-			}
-			*/
+			System.out.println("Student o id 2 to: "+students.get(2).getFirstName()+" "+students.get(2).getLastName());
 			
 			
 			stmt.close();

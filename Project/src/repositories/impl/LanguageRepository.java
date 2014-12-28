@@ -1,18 +1,22 @@
 package repositories.impl;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import domain.*;
-import repositories.ILanguageRepository;
+import unitofwork.IUnitOfWork;
 
 public class LanguageRepository extends Repository<Language> {
 	
-	public LanguageRepository(Connection connection, IEntityBuilder<Language> builder) {
-		super(connection,builder);
+	public LanguageRepository(Connection connection, IEntityBuilder<Language> builder, IUnitOfWork uow) {
+		super(connection,builder,uow);
 	}
 
+	@Override
+	protected void setUpInsertQuery(Language entity) throws SQLException {
+		insert.setString(1, entity.getName());
+		insert.setString(2, entity.getLevel());
+	}
+	
 	@Override
 	protected String getInsertQuery() {
 		return "INSERT INTO languages(name,level) VALUES(?,?)";
@@ -26,13 +30,6 @@ public class LanguageRepository extends Repository<Language> {
 	@Override
 	protected String getTableName() {
 		return "languages";
-	}
-
-	@Override
-	protected void setUpInsertQuery(Language entity) throws SQLException {
-		
-		insert.setString(1, entity.getName());
-		insert.setString(2, entity.getLevel());
 	}
 
 	@Override
