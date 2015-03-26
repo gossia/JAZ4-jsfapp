@@ -9,7 +9,7 @@
 <body>
 <center>
 		<h3>We are sorry but this conference has reached the maximum number of attendees!</h3>
-		<a href="getPersonData.jsp">Return to the registration form</a>
+		<a href="index.jsp">Return to the homepage</a>
 </center>
 </body>
 </html>

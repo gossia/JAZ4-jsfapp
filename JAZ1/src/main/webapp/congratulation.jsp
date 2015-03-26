@@ -9,7 +9,8 @@
 <body>
 <center>
 		<h3>Congratulations, you have successfully registered for the conference!</h3>
-		<a href="getPersonData.jsp">Return to the registration form</a>
+		<a href="getPersonData.jsp">Add another person</a></br></br>
+		<a href="index.jsp">Return to the homepage</a>
 </center>
 </body>
 </html>

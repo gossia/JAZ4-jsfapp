@@ -7,15 +7,14 @@
 <title>Conference Registration</title>
 </head>
 <body>
-
 <center>
-<h3>Please book for the conference "JAVA 4 US!" by filling the form below</h3>
 
+<h3>Please book for the conference "JAVA 4 US!" by filling the form below</h3>
 <form action="FirstServlet" method="post">
 	<table>
  	<tr><td>First name:</td><td><input type="text" name="firstName"></td></tr>
  	<tr><td>Last name:</td><td><input type="text" name="lastName"></td></tr>
-	<tr><td>Organization:</td><td><input type="text" name="organization"></td></tr>
+	<tr><td>Organization:</td><td><input type="text" name="organisation"></td></tr>
 	<tr><td>Email:</td><td><input type="text" name="email"></td></tr>
 	<tr><td>Confirm Email:</td><td><input type="text" name="email_confirm"></td></tr>
 	</table>
@@ -37,6 +36,16 @@
   <input type="submit" value=" REGISTER ">
   
 </form>
+<h4><font color=red>
+	<%
+		if(request.getAttribute("retypeEmail") != null)
+			out.println(request.getAttribute("retypeEmail"));
+		if(request.getAttribute("fillAll") != null)
+			out.println(request.getAttribute("fillAll"));
+		if(request.getAttribute("alreadySent") != null)
+			out.println(request.getAttribute("alreadySent"));
+	%>
+</font></h4>
 </center>
 </body>
 </html>
