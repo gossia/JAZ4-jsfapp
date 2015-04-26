@@ -41,26 +41,22 @@ public class PrivilegeServlet extends HttpServlet {
 			{
 				u.setPrivilege(Privilege.PREMIUM);
 				request.getRequestDispatcher("listOfUsers.jsp").forward(request, response);
-				//return;
 			}
 			else if(u.getPrivilege().equals(Privilege.PREMIUM))
 			{
 				u.setPrivilege(Privilege.REGULAR);
 				request.getRequestDispatcher("listOfUsers.jsp").forward(request, response);
-				//return;
 			}
 			else
 			{
 				request.setAttribute("badUser", "This user is neither a REGULAR nor a PREMIUM user!");
 				request.getRequestDispatcher("addDelPrivilegesForm.jsp").forward(request, response);
-				//return;
 			}
 		}
 		else
 		{
 			request.setAttribute("noSuchUser", "No such user!");
 			request.getRequestDispatcher("addDelPrivilegesForm.jsp").forward(request, response);
-			//return;
 		}
 		
 	}

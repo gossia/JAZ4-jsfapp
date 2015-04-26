@@ -41,7 +41,7 @@ public class AddressServlet extends HttpServlet {
 		}
 		
 		request.getRequestDispatcher("userProfile.jsp").forward(request, response);
-		//return;
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

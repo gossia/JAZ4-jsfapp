@@ -44,13 +44,11 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("email", u.getEmail());
 			session.setAttribute("privilege", u.getPrivilege());
 			request.getRequestDispatcher("userProfile.jsp").forward(request, response);
-			//return;
 		}
 		else
 		{
 				request.setAttribute("badUserOrPass", "You have entered an incorrect username or password!");
 				request.getRequestDispatcher("loginForm.jsp").forward(request, response);
-				//return;
 		}
 		
 	}

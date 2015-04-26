@@ -41,13 +41,11 @@ public class RegServlet extends HttpServlet {
 		if(!validation.filledIn() || !validation.passwordConfirm() || validation.userExists())
 		{
 			request.getRequestDispatcher("newUserRegForm.jsp").forward(request, response);
-			//return;
 		}
 		else
 		{
 			db.users.add(new UserBuilder().build(request));
 			request.getRequestDispatcher("registered.jsp").forward(request, response);
-			//return;
 		}
 	}
 
