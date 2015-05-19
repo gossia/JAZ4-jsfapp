@@ -11,27 +11,40 @@
 
 	<ui:define name="content">
 		<h:form>
+		
+	<f:event type="postValidate" listener="#{patientBean.validatePeselDob}" />
+	
 			<h:panelGrid columns="2" styleClass="className">
 				<h:outputText value="#{msg.patientFirstNameLabel}: " />
-				<h:inputText id="firstName" value="#{patientBean.patient.firstName}" />
+				<h:inputText id="firstName" value="#{patientBean.patient.firstName}" required="#{true}" label="Imię" >
+				<f:validateLength minimum="2" maximum="50" />
+				</h:inputText>
 
 				<h:outputText value="#{msg.patientLastNameLabel}: " />
-				<h:inputText id="lastName" value="#{patientBean.patient.lastName}" />
+				<h:inputText id="lastName" value="#{patientBean.patient.lastName}" required="#{true}" label="Nazwisko">
+				<f:validateLength minimum="2" maximum="50" />
+				</h:inputText>
 
 				<h:outputText value="#{msg.patientPeselLabel}: " />
-				<h:inputText id="pesel" value="#{patientBean.patient.pesel}" />
+				<h:inputText id="pesel" value="#{patientBean.patient.pesel}" required="#{true}" label="PESEL">
+					<f:validator validatorId="peselValidator" />
+				</h:inputText>
 
 				<h:outputText value="#{msg.patientDateOfBirthLabel}: " />
 				<h:inputText id="dateOfBirth"
-					value="#{patientBean.patient.dateOfBirth}" />
+					value="#{patientBean.patient.dateOfBirth}" required="#{true}" label="Data urodzenia">
+					<f:convertDateTime type="date" pattern="dd.MM.yyyy" />
+					<f:validator validatorId="dateOfBirthValidator" />
+				</h:inputText>
 					
 				<h:outputText value="#{msg.patientAddressLabel}: " />
 				<h:inputText id="address"
-					value="#{patientBean.patient.address}" />
+					value="#{patientBean.patient.address}" required="#{true}" label="Adres"/>
 
 				<h:outputText value="#{msg.patientPhoneNumberLabel}: " />
-				<h:inputText id="phoneNumber"
-					value="#{patientBean.patient.phoneNumber}" />
+				<h:inputText id="phoneNumber" value="#{patientBean.patient.phoneNumber}" label="Numer telefonu">
+					<f:validator validatorId="phoneValidator" />
+				</h:inputText>
 
 				<h:outputText value="#{msg.patientWeightLabel}: " />
 				<h:inputText id="weight" value="#{patientBean.patient.weight}" />
@@ -44,6 +57,12 @@
 				<h:commandButton type="submit" value="#{msg.patientFormOKButton}"
 					action="#{patientBean.addPatient}" />
 			</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:messages id="messages" showDetail="#{true}" style="color:red"
+					showSummary="#{false}" />
+			</h:panelGrid>
+			
 		</h:form>
 
 	</ui:define>

@@ -1,20 +1,24 @@
 package com.jsfapplication.domain;
 
+import java.util.Date;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class Patient {
 	
-	private String firstName;
-	private String lastName;
-	private String pesel;
-	private String dateOfBirth;
-	private String address;
-	private String phoneNumber;
-	private String weight;
-	private String height;
-	
-
+	private String firstName = "";
+	private String lastName = "";
+	private String pesel = "";
+	private Date dateOfBirth = new Date();
+	private String address = "";
+	private String phoneNumber = null;
+	private int weight;
+	private int height;
+	private String entryDate = String.format("%tF", new Date());
+ 
 	public Patient() {}
-	
 	
 	public String getFirstName() {
 		return firstName;
@@ -48,11 +52,11 @@ public class Patient {
 		this.phoneNumber = phoneNumber;
 	}
 	
-	public String getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 	
@@ -64,20 +68,33 @@ public class Patient {
 		this.address = address;
 	}
 
-	public String getWeight() {
+	public int getWeight() {
 		return weight;
 	}
 
-	public void setWeight(String weight) {
+	public void setWeight(int weight) {
 		this.weight = weight;
 	}
 
-	public String getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
-	public void setHeight(String height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
+
+
+	public String getEntryDate() {
+		return entryDate;
+	}
+
+
+	public void setEntryDate(String entryDate) {
+		this.entryDate = entryDate;
+	}
+
+
+	
 
 }

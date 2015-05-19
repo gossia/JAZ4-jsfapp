@@ -16,6 +16,11 @@
 	      <f:facet name="header">#{msg.patientAllLabel}</f:facet>
 	      
 	      <h:column>
+	        <f:facet name="header">#{msg.patientEntryDateLabel}</f:facet>
+	        #{item.entryDate}
+	      </h:column>
+	      
+	      <h:column>
 	        <f:facet name="header">#{msg.patientFirstNameLabel}</f:facet>
 	        #{item.firstName}
 	      </h:column>
@@ -28,6 +33,16 @@
 	      <h:column>
 	        <f:facet name="header">#{msg.patientPeselLabel}</f:facet>
 	        #{item.pesel}
+	      </h:column>
+	      
+	      <h:column>
+	        <f:facet name="header">#{msg.patientWeightLabel}</f:facet>
+	        #{item.weight}
+	      </h:column>
+	      
+	      <h:column>
+	        <f:facet name="header">#{msg.patientHeightLabel}</f:facet>
+	        #{item.height}
 	      </h:column>
 	      
 	     </h:dataTable>
