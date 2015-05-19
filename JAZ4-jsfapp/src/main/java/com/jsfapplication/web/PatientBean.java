@@ -1,41 +1,18 @@
 package com.jsfapplication.web;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.ListDataModel;
-import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.interceptor.Interceptor;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import com.jsfapplication.domain.Patient;
 import com.jsfapplication.service.PatientManager;
