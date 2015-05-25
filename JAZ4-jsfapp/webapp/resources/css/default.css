@@ -4,7 +4,7 @@ body {
    background-color: #F5F5F5;
    font-family: Verdana, sans-serif;
    font-size: 0.9em;
-   background-image: url("images/doctors.png");
+   background-image: url("images/doctors.png.jsf");
    background-repeat: no-repeat;
    background-attachment: fixed;
    background-position: right bottom; 

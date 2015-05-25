@@ -14,6 +14,7 @@
 		
 	<f:event type="postValidate" listener="#{patientBean.validatePeselDob}" />
 	
+	
 			<h:panelGrid columns="2" styleClass="className">
 				<h:outputText value="#{msg.patientFirstNameLabel}: " />
 				<h:inputText id="firstName" value="#{patientBean.patient.firstName}" required="#{true}" label="Imię" >
@@ -26,7 +27,7 @@
 				</h:inputText>
 
 				<h:outputText value="#{msg.patientPeselLabel}: " />
-				<h:inputText id="pesel" value="#{patientBean.patient.pesel}" required="#{true}" label="PESEL">
+				<h:inputText id="pesel" value="#{patientBean.patient.pesel}" validator="#{patientBean.uniquePesel}" required="#{true}" label="PESEL">
 					<f:validator validatorId="peselValidator" />
 				</h:inputText>
 

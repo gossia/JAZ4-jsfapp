@@ -1,5 +1,6 @@
 package com.jsfapplication.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +9,9 @@ import javax.faces.bean.ApplicationScoped;
 import com.jsfapplication.domain.Patient;
 
 @ApplicationScoped
-public class PatientManager {
+public class PatientManager implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private static List<Patient> db = new ArrayList<Patient>();
 	
 	public void addPatient(Patient patient) {

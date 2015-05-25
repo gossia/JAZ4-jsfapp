@@ -5,12 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.ListDataModel;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -27,11 +29,10 @@ public class PatientBean implements Serializable {
 	private Patient patient = new Patient();
 	private ListDataModel<Patient> patients = new ListDataModel<Patient>();
 	
-	//@Inject
-	//private PatientManager pm;
-	
-	private PatientManager pm = new PatientManager();
+	@Inject
+	private PatientManager pm;
 
+	//private PatientManager pm = new PatientManager();
 
 	public Patient getPatient() {
 		return patient;
@@ -91,4 +92,20 @@ public class PatientBean implements Serializable {
 		}	
 	}
 	
+	// Validator unikalnosci peselu
+	
+	public void uniquePesel(FacesContext context, UIComponent component,
+			Object value){
+
+		String pesel = (String) value;
+		
+		for (Patient patient : pm.getAllPatients()) {
+			if (patient.getPesel().equals(pesel)) {
+				FacesMessage message = new FacesMessage(
+						"Pacjent o tym numerze PESEL juz istnieje");
+				message.setSeverity(FacesMessage.SEVERITY_ERROR);
+				throw new ValidatorException(message);
+			}
+		}
+	}
 }

@@ -40,24 +40,6 @@ public class PeselValidator implements Validator {
 		
 	}
 	
-	
-	public void uniquePesel(FacesContext context, UIComponent component,
-			Object value) throws ValidatorException{
-
-		String pesel = (String) value;
-		PatientManager pm = new PatientManager();
-
-		for (Patient patient : pm.getAllPatients()) {
-			if (patient.getPesel().equalsIgnoreCase(pesel)) {
-				FacesMessage message = new FacesMessage(
-						"Pacjent o tym numerze PESEL juz istnieje");
-				message.setSeverity(FacesMessage.SEVERITY_ERROR);
-				throw new ValidatorException(message);
-			}
-		}
-	}
-
-	
 	public static boolean sprawdz(String pesel){
 			int[] wagi = {1, 3, 7, 9, 1, 3, 7 ,9 ,1 ,3};  // zak³adamy tablicê z wagami
 			//if (pesel.length() != 11) return false;
